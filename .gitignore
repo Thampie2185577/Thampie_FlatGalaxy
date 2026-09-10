@@ -1,0 +1,64 @@
+Visual Studio cache/options directory
+
+.vs/
+
+Build results
+
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+
+Visual Studio generated files
+
+*.pdb
+*.ilk
+*.obj
+*.idb
+*.ipch
+*.iobj
+*.pch
+*.tlog
+*.lastbuildstate
+WPF generated files
+
+*.g.cs
+*.g.i.cs
+
+Logs
+
+*.log
+logs/
+
+Temporary files
+
+*.tmp
+*.temp
+*.bak
+*~
+*.swp
+*.swo
+
+Windows
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+Database files used only for local development
+
+*.db
+*.db-shm
+*.db-wal
+
+Local configuration
+
+.env
+.env.*
+appsettings.local.json
+appsettings.*.local.json
+*.secrets.json
