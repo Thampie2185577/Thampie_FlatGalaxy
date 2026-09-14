@@ -10,6 +10,12 @@
 
   <ItemGroup>
     <Folder Include="src\" />
+	  <None Update="src\planetsExtended.csv">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="src\planetsExtended.xml">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,7 @@ namespace FlatGalaxySim
     /// </summary>
     public partial class App : Application
     {
+  
     }
 
 }

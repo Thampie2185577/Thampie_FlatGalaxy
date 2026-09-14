@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using FlatGalaxySim.FileReader;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +18,14 @@ namespace FlatGalaxySim
     /// </summary>
     public partial class MainWindow : Window
     {
+        
         public MainWindow()
         {
             InitializeComponent();
+            Canvas canvas = Flatgalaxy_Canvas;
+
+            SimSetup setup = new SimSetup(new LocalReader());
+            setup.StartSetup("./src/planetsExtended.xml");
         }
     }
 }
