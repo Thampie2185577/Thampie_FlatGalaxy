@@ -1,4 +1,6 @@
-﻿using FlatGalaxySim.FileReader;
+﻿using FlatGalaxySim.Entities;
+using FlatGalaxySim.Factories;
+using FlatGalaxySim.FileReader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,26 +14,45 @@ namespace FlatGalaxySim
     {
         private Reader? reader = null;
         private IFileParser? parser = null;
-
+       
         public SimSetup(Reader reader)
         {
             this.reader = reader;
         }
 
         // This method starts the setup process by reading the file and parsing its contents.
-        public void StartSetup(string filePath)
+        public void StartSetup(string filePath, FlatGalaxy galaxy)
         {
             if (reader == null) return;
 
+            // Read the file contents
             List<string> fileContents =  reader.ReadFile(filePath);
+            if (fileContents.Count == 0) { MessageBox.Show("File is empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
 
             parser = GetParser(reader.GetFileType());
 
-            if (parser == null) return; 
+            if (parser == null) return;
 
-            List<Dictionary<string, string>> contents = parser.ParseContent(fileContents);
+            // Parse the file contents and create celestial bodies
+            List<Dictionary<string, string>> parsedContents = parser.ParseContent(fileContents);
+            galaxy.CelestialBodies = CreateObject(parsedContents);
+        }
 
-            if (fileContents.Count == 0){ MessageBox.Show("File is empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error); }
+
+        private List<CelestialBody> CreateObject(List<Dictionary<string, string>> contents )
+        {
+            List<CelestialBody> celestialBodies = new List<CelestialBody>();
+
+            contents.ForEach(content =>
+            {
+                CelestialBody? celestialBody = CelestialBodyFactory.CreateCelestialBody(content);
+                if (celestialBody != null)
+                {
+                    celestialBodies.Add(celestialBody);
+                }
+            });
+
+            return (celestialBodies.Count > 0)  ? celestialBodies : ;
         }
 
         private IFileParser? GetParser(FileType fileType)

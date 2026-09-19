@@ -1,4 +1,5 @@
-﻿using FlatGalaxySim.FileReader;
+﻿using FlatGalaxySim.Entities;
+using FlatGalaxySim.FileReader;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -22,10 +23,15 @@ namespace FlatGalaxySim
         public MainWindow()
         {
             InitializeComponent();
-            Canvas canvas = Flatgalaxy_Canvas;
 
+            Canvas canvas = Flatgalaxy_Canvas;
             SimSetup setup = new SimSetup(new LocalReader());
-            setup.StartSetup("./src/planetsExtended.xml");
+
+            FlatGalaxy galaxy = new FlatGalaxy(canvas);
+            setup.StartSetup("./src/planetsExtended.csv", galaxy);
+
+            if(galaxy.CelestialBodies != null)
+                galaxy.runSimulation();
         }
     }
 }

@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlatGalaxySim"
         mc:Ignorable="d"
-        Title="Starter" Height="450" Width="800">
-    <Grid>
-        
+        Title="Setup sim" Height="450" Width="800" Foreground="White">
+    <Grid  Background="Black" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" FontWeight="Bold" Foreground="Wheat" TextAlignment="Center" Padding="20" FontSize="30">SETUP SIMULATION</TextBlock>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+            
+            <Button  Click="Done_Click" Background="LightGreen" Content="START SIMULATION" Grid.Row="2" Width="150" Height="40" />
+        </Grid>
     </Grid>
 </Window>

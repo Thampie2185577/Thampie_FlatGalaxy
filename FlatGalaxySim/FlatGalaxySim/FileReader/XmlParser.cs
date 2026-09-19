@@ -30,7 +30,6 @@ namespace FlatGalaxySim.FileReader
                         lineData["type"] = "asteroid";
                         break;
                     default:
-                        lineData["type"] = "unknown";
                         break;
                 }
        

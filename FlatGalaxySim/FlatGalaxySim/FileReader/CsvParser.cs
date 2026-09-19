@@ -10,6 +10,7 @@ namespace FlatGalaxySim.FileReader
 {
     public class CsvParser : IFileParser
     {
+        // function that parse list string into list of dictionary with key as header and value as value
         public List<Dictionary<string, string>> ParseContent(List<string> fileContent)
         {
             List<Dictionary<string, string>> parsedContent = [];
