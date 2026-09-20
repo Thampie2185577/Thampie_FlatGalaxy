@@ -74,7 +74,6 @@ namespace FlatGalaxySim.Factories
                             throw new ArgumentException($"Invalid value for Radius: {value.Value}");
                         break;
                     case "oncollision":
-                        builder.SetOnCollision(value.Value);
                         break;
                 }
             }
@@ -133,6 +132,7 @@ namespace FlatGalaxySim.Factories
                         builder.SetOnCollision(value.Value);
                         break;
                 }
+                
             }
 
             return builder.GetResult();

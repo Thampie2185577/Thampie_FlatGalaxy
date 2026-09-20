@@ -39,7 +39,7 @@ namespace FlatGalaxySim
         }
 
 
-        private List<CelestialBody> CreateObject(List<Dictionary<string, string>> contents )
+        private List<CelestialBody> CreateObject(List<Dictionary<string, string>> contents)
         {
             List<CelestialBody> celestialBodies = new List<CelestialBody>();
 

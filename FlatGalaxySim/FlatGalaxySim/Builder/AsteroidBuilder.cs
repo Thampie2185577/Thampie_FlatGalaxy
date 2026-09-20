@@ -53,7 +53,7 @@ namespace FlatGalaxySim.Builder
 
         public void SetRadius(int radius)
         {
-            asteroid.Raduis = (int)radius;
+            asteroid.Radius = (int)radius;
         }
 
         public void SetOnCollision(string onCollision)
@@ -70,6 +70,5 @@ namespace FlatGalaxySim.Builder
         {
             return asteroid;
         }
-
     }
 }

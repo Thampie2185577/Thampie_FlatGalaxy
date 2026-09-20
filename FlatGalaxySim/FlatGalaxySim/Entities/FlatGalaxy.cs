@@ -5,21 +5,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace FlatGalaxySim.Entities
 {
     public class FlatGalaxy
     {
-       private Canvas Canvas;
-       public List<CelestialBody> CelestialBodies { get; set; }
+       private Canvas mainCanvas;
+       public List<CelestialBody> celestials;
+       public List<CelestialBody> CelestialBodies { get => celestials; set => celestials = value; }
+
+       private TimeSpan lastTime = TimeSpan.Zero;
+
+       public Canvas Canvas { get { return mainCanvas; }}
        public bool IsRunning { get; set; } = false;
 
-        public FlatGalaxy(Canvas canvas)
+       public FlatGalaxy(Canvas canvas)
        {
-          Canvas = canvas;
+          this.mainCanvas = canvas;
           CelestialBodies = new List<CelestialBody>();
        }
 
+
+        public void SetBodies()
+        {
+            if(celestials.Count == 0 ) { return; }
+
+            foreach (var body in celestials)
+            {
+                body.Galaxy = this;
+            }
+        }
 
         public void runSimulation() {
 
@@ -27,15 +44,14 @@ namespace FlatGalaxySim.Entities
             {
                 if (Canvas == null) throw new ArgumentNullException("Canvas cannot be null.");
 
-                if (CelestialBodies.Count < 0) throw new ArgumentNullException("CelestialBodies cannot be null.");
+                if (celestials.Count < 0) throw new ArgumentNullException("CelestialBodies cannot be null.");
                 else { IsRunning = true; }
 
 
-                //while (IsRunning) { 
-                    
-    
-                //}
+                
                 DrawBodies();
+                IsRunning = true;
+                CompositionTarget.Rendering += OnRendering;
 
             }
             catch (Exception e)
@@ -48,9 +64,30 @@ namespace FlatGalaxySim.Entities
 
         private void DrawBodies() {
 
-            foreach (var body in CelestialBodies)
+            //this.Canvas.Children.Clear();
+            foreach (var body in celestials)
+            {   
+                body.Draw();
+            }
+        }
+
+        private double TIMESCALE = 25;
+        private void OnRendering(object sender, EventArgs e)
+        {
+            var now = ((RenderingEventArgs)e).RenderingTime;
+            if (lastTime == TimeSpan.Zero) { lastTime = now; return; }
+
+            double dt = (now - lastTime).TotalSeconds * TIMESCALE;
+            if (dt <= 0) return;  
+            lastTime = now;
+
+            foreach (var body in celestials)
             {
-                body.Draw(Canvas);
+                body.MoveBody(
+                    dt, 
+                    Application.Current.MainWindow.ActualWidth, 
+                    Application.Current.MainWindow.ActualHeight
+                    );       
             }
         }
     }

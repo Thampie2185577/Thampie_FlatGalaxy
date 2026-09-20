@@ -19,7 +19,7 @@ namespace FlatGalaxySim
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
         public MainWindow(Reader reader, string filePath)
         {
             InitializeComponent();
@@ -28,10 +28,27 @@ namespace FlatGalaxySim
             SimSetup setup = new SimSetup(reader);
 
             FlatGalaxy galaxy = new FlatGalaxy(canvas);
-           // setup.StartSetup("./src/planetsExtended.csv", galaxy);
-            setup.StartSetup(filePath, galaxy);
+            setup.StartSetup("./src/planetsExtended.csv", galaxy);
+            //setup.StartSetup(filePath, galaxy);
 
-            if(galaxy.CelestialBodies != null)
+            if (galaxy.CelestialBodies != null)
+                galaxy.SetBodies();
+            galaxy.runSimulation();
+        }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            Canvas canvas = Flatgalaxy_Canvas;
+            SimSetup setup = new SimSetup(new LocalReader());
+
+            FlatGalaxy galaxy = new FlatGalaxy(canvas);
+            setup.StartSetup("./src/planetsExtended.csv", galaxy);
+            //setup.StartSetup(filePath, galaxy);
+
+            if (galaxy.CelestialBodies != null)
+                galaxy.SetBodies();
                 galaxy.runSimulation();
         }
     }
