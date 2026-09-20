@@ -52,7 +52,8 @@ namespace FlatGalaxySim
                 }
             });
 
-            return (celestialBodies.Count > 0)  ? celestialBodies : ;
+            ArgumentNullException.ThrowIfNull(celestialBodies);
+            return (celestialBodies.Count > 0) ? celestialBodies : throw new ArgumentException("there are no celestialbodies", nameof(celestialBodies)) ;
         }
 
         private IFileParser? GetParser(FileType fileType)

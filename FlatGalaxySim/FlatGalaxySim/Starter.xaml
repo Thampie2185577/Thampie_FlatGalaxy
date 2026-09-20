@@ -24,9 +24,29 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+                <RadioButton Grid.Column="0" FontSize="15" Click="LocalOption" Name="localReader"  VerticalAlignment="Center" Foreground="Wheat" HorizontalAlignment="Center"  >
+                   USE LOCAL FILE
+                    <RadioButton.LayoutTransform>
+                        <ScaleTransform ScaleX="2" ScaleY="2"/>
+                    </RadioButton.LayoutTransform>
+                </RadioButton>
+                <RadioButton Grid.Column="1" FontSize="15" Click="WebOption"  Name="webReader"  VerticalAlignment="Center" Foreground="Wheat" HorizontalAlignment="Center"  >
+                    USE WEB FILE
+                    <RadioButton.LayoutTransform>
+                        <ScaleTransform ScaleX="2" ScaleY="2"/>
+                    </RadioButton.LayoutTransform>
+                </RadioButton>
             </Grid>
-            
-            <Button  Click="Done_Click" Background="LightGreen" Content="START SIMULATION" Grid.Row="2" Width="150" Height="40" />
+            <Grid Grid.Row="1"  Visibility="Collapsed" x:Name="UiLocal">
+                <StackPanel HorizontalAlignment="Center">
+                    <Button BorderThickness="0" FontSize="15" Background="LightSkyBlue"  Grid.Row="1" Width="200" Height="50" Content="Kies een bestand" Click="OpenFile_Click"/>
+                    <TextBlock x:Name="txtPath" Margin="20" Width="200" Height="30" Foreground="White"></TextBlock>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1"  Visibility="Collapsed" x:Name="UiWeb">
+                <TextBox x:Name="UrlTextBox" Width="200" Height="30" FontSize="15" Padding="3" Background="White" Text="https://" />
+            </Grid>
+            <Button BorderThickness="0" Click="Done_Click" Background="LightGreen" Content="START SIMULATION" Grid.Row="2" Width="150" Height="40" />
         </Grid>
     </Grid>
 </Window>

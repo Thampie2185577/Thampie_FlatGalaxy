@@ -20,15 +20,16 @@ namespace FlatGalaxySim
     public partial class MainWindow : Window
     {
         
-        public MainWindow()
+        public MainWindow(Reader reader, string filePath)
         {
             InitializeComponent();
 
             Canvas canvas = Flatgalaxy_Canvas;
-            SimSetup setup = new SimSetup(new LocalReader());
+            SimSetup setup = new SimSetup(reader);
 
             FlatGalaxy galaxy = new FlatGalaxy(canvas);
-            setup.StartSetup("./src/planetsExtended.csv", galaxy);
+           // setup.StartSetup("./src/planetsExtended.csv", galaxy);
+            setup.StartSetup(filePath, galaxy);
 
             if(galaxy.CelestialBodies != null)
                 galaxy.runSimulation();
