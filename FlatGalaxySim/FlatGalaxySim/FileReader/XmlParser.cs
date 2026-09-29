@@ -24,10 +24,10 @@ namespace FlatGalaxySim.FileReader
                 switch (element.Name.LocalName)
                 {
                     case "planet":
-                        lineData["type"] = "planet";
+                        lineData["type"] = element.Name.LocalName;
                         break;
                     case "asteroid":
-                        lineData["type"] = "asteroid";
+                        lineData["type"] = element.Name.LocalName;
                         break;
                     default:
                         break;

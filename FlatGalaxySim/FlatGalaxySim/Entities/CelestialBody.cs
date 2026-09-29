@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlatGalaxySim.States;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,9 +17,9 @@ namespace FlatGalaxySim.Entities
         private Velocity velocity;
         private int radius = 0;
         private BodyColor bodyColor;
-        private string onCollision = "";
         private FlatGalaxy? galaxy = null;
         private Ellipse? ellipse = null;
+        private State? onCollisionState = null;
 
 
         public string Type { get => type; set => type = value; }
@@ -26,10 +27,12 @@ namespace FlatGalaxySim.Entities
         public Velocity Velocity { get => velocity; set => velocity = value; }
         public int Radius { get => radius; set => radius = value; }
         public BodyColor BodyColor { get => bodyColor; set => bodyColor = value; }
-        public string OnCollision { get => onCollision; set => onCollision = value; }
         public FlatGalaxy Galaxy { get => galaxy; set => galaxy = value; }
+        public State OnCollisionState { get => onCollisionState; set => onCollisionState = value; }
+        public Ellipse Ellipse { get => ellipse; set => ellipse = value; }
 
 
+        public bool IsDrawable = true;
         public void Draw()
         {
             ellipse = new Ellipse
@@ -44,7 +47,6 @@ namespace FlatGalaxySim.Entities
             if(galaxy != null) 
                 galaxy.Canvas.Children.Add(ellipse);
         }
-
 
         public void MoveBody(double dt, double cWidth, double cHeight)
         {
@@ -73,11 +75,39 @@ namespace FlatGalaxySim.Entities
                 velocity.vy = -velocity.vy;
             }
 
-
-           
-               
             Canvas.SetLeft(ellipse, position.x - Radius);
             Canvas.SetTop(ellipse, position.y - Radius);
+        }
+
+        public void ChangeDirection()
+        {
+            this.velocity.vx = -this.velocity.vx;
+            this.velocity.vy = -this.velocity.vy;
+        }
+
+        public bool isColliding = false;
+        private bool wasColliding = false;
+        public void runState()
+        {
+            if (onCollisionState != null && isColliding && !wasColliding)
+            {
+                onCollisionState.Handle();
+            }
+            else if (!isColliding && wasColliding)
+            {
+                if (onCollisionState is BlinkState blink)
+                {
+                    blink.ResetState();
+                }
+            }
+
+            wasColliding = isColliding;
+        }
+
+        public void TransitionState(State state)
+        {
+            this.onCollisionState = state;
+            this.onCollisionState.SetContext(this);
         }
     }
 }

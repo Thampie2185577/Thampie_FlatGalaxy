@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlatGalaxySim.States;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,13 +14,11 @@ namespace FlatGalaxySim.Entities
     public class FlatGalaxy
     {
        private Canvas mainCanvas;
-       public List<CelestialBody> celestials;
+       private List<CelestialBody> celestials;
        public List<CelestialBody> CelestialBodies { get => celestials; set => celestials = value; }
 
-       private TimeSpan lastTime = TimeSpan.Zero;
-
        public Canvas Canvas { get { return mainCanvas; }}
-       public bool IsRunning { get; set; } = false;
+       private bool isRunning = false;
 
        public FlatGalaxy(Canvas canvas)
        {
@@ -27,13 +26,13 @@ namespace FlatGalaxySim.Entities
           CelestialBodies = new List<CelestialBody>();
        }
 
-
         public void SetBodies()
         {
             if(celestials.Count == 0 ) { return; }
 
             foreach (var body in celestials)
             {
+                if (body.Galaxy != null) continue;
                 body.Galaxy = this;
             }
         }
@@ -45,33 +44,30 @@ namespace FlatGalaxySim.Entities
                 if (Canvas == null) throw new ArgumentNullException("Canvas cannot be null.");
 
                 if (celestials.Count < 0) throw new ArgumentNullException("CelestialBodies cannot be null.");
-                else { IsRunning = true; }
+                else { isRunning = true; }
 
-
-                
-                DrawBodies();
-                IsRunning = true;
-                CompositionTarget.Rendering += OnRendering;
-
+                if (isRunning) {
+                    DrawBodies();
+                    CompositionTarget.Rendering += OnRendering;
+                }
             }
             catch (Exception e)
             {
-
                   MessageBox.Show("Error:" + e, "error", MessageBoxButton.OK, MessageBoxImage.Error);
             }    
         }
 
+        public void DrawBodies() {
 
-        private void DrawBodies() {
-
-            //this.Canvas.Children.Clear();
+            this.Canvas.Children.Clear();
             foreach (var body in celestials)
             {   
-                body.Draw();
+                if(body.IsDrawable) body.Draw();
             }
         }
 
         private double TIMESCALE = 25;
+        private TimeSpan lastTime = TimeSpan.Zero;
         private void OnRendering(object sender, EventArgs e)
         {
             var now = ((RenderingEventArgs)e).RenderingTime;
@@ -81,14 +77,69 @@ namespace FlatGalaxySim.Entities
             if (dt <= 0) return;  
             lastTime = now;
 
+            List<CelestialBody> chosenBodyToDelete = new List<CelestialBody>();
+
+            if(newBodies.Count != 0)
+            {
+                newBodies.ForEach(b => { celestials.Add(b); });
+                newBodies.Clear();
+            }
+
             foreach (var body in celestials)
             {
+                //check if the body is allowed to be drawn if noet then must be deleted from celestialbodies list;
+                if (body.IsDrawable == false) { chosenBodyToDelete.Add(body); continue; } ;
+
                 body.MoveBody(
-                    dt, 
-                    Application.Current.MainWindow.ActualWidth, 
-                    Application.Current.MainWindow.ActualHeight
-                    );       
+                    dt,
+                    this.Canvas.ActualWidth,
+                    this.Canvas.ActualHeight
+                    );    
+                
+                CollisionDetection(body);
             }
+
+            if (chosenBodyToDelete != null)
+            {
+                DeleteBody(chosenBodyToDelete);
+            }
+        }
+
+        private List<CelestialBody> newBodies = new List<CelestialBody>();
+        public void AddNewBodies(CelestialBody newBody)
+        {
+            newBody.Galaxy = this;
+            newBody.Draw();
+            newBodies.Add(newBody);
+        }
+
+        private void DeleteBody(List<CelestialBody> chosenBodies)
+        {
+            foreach (var body in chosenBodies)
+                this.celestials.Remove(body);
+        }
+
+        private void CollisionDetection(CelestialBody body)
+        {
+            bool anyCollision = false;
+            foreach (var secondBody in celestials)
+            {
+                if(secondBody.Equals(body)) continue;
+
+                double dx = secondBody.Position.x - body.Position.x;
+                double dy = secondBody.Position.y - body.Position.y;
+
+                double radiusSum = body.Radius + secondBody.Radius;
+                bool collision = (dx * dx + dy * dy) <= (radiusSum * radiusSum);
+
+                if (collision)
+                {
+                    anyCollision = true;
+                }
+            }
+
+            body.isColliding = anyCollision;
+            body.runState();
         }
     }
 }

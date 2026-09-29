@@ -1,6 +1,8 @@
 ﻿using FlatGalaxySim.Entities;
+using FlatGalaxySim.Factories;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,14 +20,16 @@ namespace FlatGalaxySim.Builder
 
         public void SetType(string type) => asteroid.Type = type;
 
-        public void SetX(int x)
+        public void SetName(string name) => throw new NotImplementedException();
+       
+        public void SetX(double x)
         {
             var position = asteroid.Position;
             position.x = x;
             asteroid.Position = position;
         }
         
-        public void SetY(int y)
+        public void SetY(double y)
         {
             var position = asteroid.Position; 
             position.y = y;
@@ -56,19 +60,16 @@ namespace FlatGalaxySim.Builder
             asteroid.Radius = (int)radius;
         }
 
-        public void SetOnCollision(string onCollision)
-        {
-            asteroid.OnCollision = onCollision;
-        }
-
         public void SetState(string state)
         {
-            //asteroid.State = state;
+            asteroid.OnCollisionState = StateFactory.CreateState(this.asteroid, state);
+            
         }
 
         public Asteroid GetResult()
         {
             return asteroid;
         }
+
     }
 }

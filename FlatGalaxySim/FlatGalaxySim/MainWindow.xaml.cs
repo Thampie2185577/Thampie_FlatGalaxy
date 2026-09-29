@@ -28,12 +28,11 @@ namespace FlatGalaxySim
             SimSetup setup = new SimSetup(reader);
 
             FlatGalaxy galaxy = new FlatGalaxy(canvas);
-            setup.StartSetup("./src/planetsExtended.csv", galaxy);
-            //setup.StartSetup(filePath, galaxy);
+            setup.StartSetup(filePath, galaxy);
 
             if (galaxy.CelestialBodies != null)
                 galaxy.SetBodies();
-            galaxy.runSimulation();
+                galaxy.runSimulation();
         }
 
         public MainWindow()

@@ -11,12 +11,13 @@ namespace FlatGalaxySim.Builder
     {
         void Reset();
         void SetType(string type);
-        void SetX(int x);
-        void SetY(int y);
+        void SetName(string name);
+        void SetX(double x);
+        void SetY(double y);
         void SetVx(double vx);
         void SetVy(double vy);
         void SetColor(string color);
         void SetRadius(int radius);
-        void SetOnCollision(string onCollision);
+        void SetState(string onCollision);
     }
 }

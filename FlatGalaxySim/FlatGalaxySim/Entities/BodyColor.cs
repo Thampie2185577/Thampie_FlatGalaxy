@@ -15,7 +15,10 @@ namespace FlatGalaxySim.Entities
                 { "black", Color.FromArgb(255, 0, 0, 0) },
                 { "brown", Color.FromArgb(255, 165, 42, 42) },
                 { "grey", Color.FromArgb(255, 128, 128, 128) },
-                { "orange", Color.FromArgb(255, 255, 165, 0) }
+                { "orange", Color.FromArgb(255, 255, 165, 0) },
+                { "pink", Color.FromArgb(255, 245, 174, 245) },
+                { "red", Color.FromArgb(255, 255, 0, 0) },
+                { "green", Color.FromArgb(255, 0, 255, 0) },
             };
 
         public BodyColor(string colorKey)

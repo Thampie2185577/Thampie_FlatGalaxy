@@ -1,4 +1,5 @@
 ﻿using FlatGalaxySim.Entities;
+using FlatGalaxySim.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace FlatGalaxySim.Builder
 {
     public class PlanetBuilder : ICelestialBuilder
     {
-        private Planet planet = new  Planet();
+        private Planet planet = new Planet();
         public void Reset()
         {
             planet = new Planet();
@@ -19,14 +20,14 @@ namespace FlatGalaxySim.Builder
 
         public void SetType(string type) => planet.Type = type;
 
-        public void SetX(int x)
+        public void SetX(double x)
         {
             var position = planet.Position;
             position.x = x;
             planet.Position = position;
         }
 
-        public void SetY(int y)
+        public void SetY(double y)
         {
             var position = planet.Position;
             position.y = y;
@@ -57,9 +58,9 @@ namespace FlatGalaxySim.Builder
             planet.Radius = (int)radius;
         }
 
-        public void SetOnCollision(string onCollision)
+        public void SetState(string state)
         {
-            planet.OnCollision = onCollision;
+            planet.OnCollisionState = StateFactory.CreateState(this.planet, state);
         }
 
         public Planet GetResult()
@@ -67,6 +68,5 @@ namespace FlatGalaxySim.Builder
             return planet;
         }
 
-        
     }
 }

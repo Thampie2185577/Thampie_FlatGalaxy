@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlatGalaxySim.States
+namespace FlatGalaxySim.Commands
 {
-    public interface IState
+    public abstract class Command
     {
+       
     }
 }
