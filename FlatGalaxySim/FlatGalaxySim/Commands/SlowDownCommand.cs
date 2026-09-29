@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace FlatGalaxySim.Commands
 {
-    public abstract class Command
+    public class SlowDownCommand : Command
     {
-        protected FlatGalaxy reciever;
-        public Command(FlatGalaxy reciever)
+        public SlowDownCommand(FlatGalaxy reciever) : base(reciever)
         {
-            this.reciever = reciever;
         }
 
-        public abstract void Execute();
+        public override void Execute()
+        {
+           reciever.RunSimSlower();
+        }
     }
 }

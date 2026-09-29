@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 
 namespace FlatGalaxySim.Commands
 {
-    public abstract class Command
+    public class PauseResumeCommand : Command
     {
-        protected FlatGalaxy reciever;
-        public Command(FlatGalaxy reciever)
+        public PauseResumeCommand(FlatGalaxy reciever) : base(reciever)
         {
-            this.reciever = reciever;
+
         }
 
-        public abstract void Execute();
+        public override void Execute()
+        {
+            reciever.PauseOrResume();
+        }
     }
 }

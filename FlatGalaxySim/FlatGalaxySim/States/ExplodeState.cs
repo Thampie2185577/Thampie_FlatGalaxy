@@ -9,15 +9,14 @@ namespace FlatGalaxySim.States
 {
     public class ExplodeState : State
     {
-        private int MAXEXPLODE = 5;
+        private int MAXENTITIES = 5;
 
         public override void Handle()
         {
             List<Dictionary<string, string>> newBodies = new List<Dictionary<string, string>>();
             Random rnd = new Random();
-            for (int i = MAXEXPLODE; i > 0; i--)
+            for (int i = MAXENTITIES; i > 0; i--)
             {
-
                 newBodies.Add(new Dictionary<string, string>{
                     { "type", "Asteroid" },
                     { "x", this.bodyContext.Position.x.ToString() },

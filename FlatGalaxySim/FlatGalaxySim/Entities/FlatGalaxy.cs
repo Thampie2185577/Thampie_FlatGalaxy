@@ -13,22 +13,22 @@ namespace FlatGalaxySim.Entities
 {
     public class FlatGalaxy
     {
-       private Canvas mainCanvas;
-       private List<CelestialBody> celestials;
-       public List<CelestialBody> CelestialBodies { get => celestials; set => celestials = value; }
+        private Canvas mainCanvas;
+        private List<CelestialBody> celestials;
+        public List<CelestialBody> CelestialBodies { get => celestials; set => celestials = value; }
 
-       public Canvas Canvas { get { return mainCanvas; }}
-       private bool isRunning = false;
+        public Canvas Canvas { get { return mainCanvas; } }
+        private bool isRunning = false;
 
-       public FlatGalaxy(Canvas canvas)
-       {
-          this.mainCanvas = canvas;
-          CelestialBodies = new List<CelestialBody>();
-       }
+        public FlatGalaxy(Canvas canvas)
+        {
+            this.mainCanvas = canvas;
+            CelestialBodies = new List<CelestialBody>();
+        }
 
         public void SetBodies()
         {
-            if(celestials.Count == 0 ) { return; }
+            if (celestials.Count == 0) { return; }
 
             foreach (var body in celestials)
             {
@@ -37,13 +37,13 @@ namespace FlatGalaxySim.Entities
             }
         }
 
-        public void runSimulation() {
-
+        public void runSimulation()
+        {
             try
             {
                 if (Canvas == null) throw new ArgumentNullException("Canvas cannot be null.");
 
-                if (celestials.Count < 0) throw new ArgumentNullException("CelestialBodies cannot be null.");
+                if (celestials.Count == 0) throw new ArgumentNullException("CelestialBodies cannot be null.");
                 else { isRunning = true; }
 
                 if (isRunning) {
@@ -53,16 +53,16 @@ namespace FlatGalaxySim.Entities
             }
             catch (Exception e)
             {
-                  MessageBox.Show("Error:" + e, "error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }    
+                MessageBox.Show("Error:" + e, "error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void DrawBodies() {
 
             this.Canvas.Children.Clear();
             foreach (var body in celestials)
-            {   
-                if(body.IsDrawable) body.Draw();
+            {
+                if (body.IsDrawable) body.Draw();
             }
         }
 
@@ -70,16 +70,17 @@ namespace FlatGalaxySim.Entities
         private TimeSpan lastTime = TimeSpan.Zero;
         private void OnRendering(object sender, EventArgs e)
         {
+            if(isRunning == false) {  return; }
             var now = ((RenderingEventArgs)e).RenderingTime;
             if (lastTime == TimeSpan.Zero) { lastTime = now; return; }
 
             double dt = (now - lastTime).TotalSeconds * TIMESCALE;
-            if (dt <= 0) return;  
+            if (dt <= 0) return;
             lastTime = now;
 
             List<CelestialBody> chosenBodyToDelete = new List<CelestialBody>();
 
-            if(newBodies.Count != 0)
+            if (newBodies.Count != 0)
             {
                 newBodies.ForEach(b => { celestials.Add(b); });
                 newBodies.Clear();
@@ -88,14 +89,14 @@ namespace FlatGalaxySim.Entities
             foreach (var body in celestials)
             {
                 //check if the body is allowed to be drawn if noet then must be deleted from celestialbodies list;
-                if (body.IsDrawable == false) { chosenBodyToDelete.Add(body); continue; } ;
+                if (body.IsDrawable == false) { chosenBodyToDelete.Add(body); continue; };
 
                 body.MoveBody(
                     dt,
                     this.Canvas.ActualWidth,
                     this.Canvas.ActualHeight
-                    );    
-                
+                    );
+
                 CollisionDetection(body);
             }
 
@@ -105,6 +106,33 @@ namespace FlatGalaxySim.Entities
             }
         }
 
+        public void RunSimFaster() => TIMESCALE += 10;
+
+        public void RunSimSlower() 
+        {
+            TIMESCALE -= 10;
+
+            if (TIMESCALE < 0)
+            {
+                TIMESCALE = 0;
+            }
+        }
+
+        public void PauseOrResume()  
+        {
+            isRunning = !isRunning;
+
+            if (isRunning)
+            {
+                lastTime = TimeSpan.Zero;
+                CompositionTarget.Rendering += OnRendering;
+            }
+            else
+            {
+                CompositionTarget.Rendering -= OnRendering;
+            }
+        }
+        
         private List<CelestialBody> newBodies = new List<CelestialBody>();
         public void AddNewBodies(CelestialBody newBody)
         {

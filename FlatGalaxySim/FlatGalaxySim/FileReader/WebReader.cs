@@ -11,8 +11,7 @@ namespace FlatGalaxySim.FileReader
     using System.IO;
     using System.Net.Http;
 
-    namespace YourNamespace
-    {
+  
         public class WebReader : Reader
         {
             // One shared instance; creating a new HttpClient per call causes socket exhaustion
@@ -49,3 +48,4 @@ namespace FlatGalaxySim.FileReader
             }
         }
     }
+

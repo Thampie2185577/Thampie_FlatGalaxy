@@ -26,29 +26,40 @@ namespace FlatGalaxySim
 
             Canvas canvas = Flatgalaxy_Canvas;
             SimSetup setup = new SimSetup(reader);
-
             FlatGalaxy galaxy = new FlatGalaxy(canvas);
+            InputHandler inputHandler = new InputHandler();
+
+            inputHandler.SetDefaultKeys(galaxy);
             setup.StartSetup(filePath, galaxy);
+
+            PreviewKeyDown += inputHandler.OnkeyDown;
+
 
             if (galaxy.CelestialBodies != null)
                 galaxy.SetBodies();
-                galaxy.runSimulation();
+                //galaxy.runSimulation();
         }
+
 
         public MainWindow()
         {
             InitializeComponent();
 
             Canvas canvas = Flatgalaxy_Canvas;
+            FlatGalaxy galaxy = new FlatGalaxy(canvas);
+
+            InputHandler inputHandler = new InputHandler();
+            inputHandler.SetDefaultKeys(galaxy);
             SimSetup setup = new SimSetup(new LocalReader());
 
-            FlatGalaxy galaxy = new FlatGalaxy(canvas);
             setup.StartSetup("./src/planetsExtended.csv", galaxy);
             //setup.StartSetup(filePath, galaxy);
+            PreviewKeyDown += inputHandler.OnkeyDown;
 
             if (galaxy.CelestialBodies != null)
                 galaxy.SetBodies();
                 galaxy.runSimulation();
         }
+
     }
 }
