@@ -1,5 +1,6 @@
 ﻿using FlatGalaxySim.Entities;
 using FlatGalaxySim.FileReader;
+using FlatGalaxySim.Windows;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -19,7 +20,7 @@ namespace FlatGalaxySim
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        InputHandler inputHandler;
         public MainWindow(Reader reader, string filePath)
         {
             InitializeComponent();
@@ -34,12 +35,10 @@ namespace FlatGalaxySim
 
             PreviewKeyDown += inputHandler.OnkeyDown;
 
-
             if (galaxy.CelestialBodies != null)
                 galaxy.SetBodies();
-                //galaxy.runSimulation();
+                galaxy.runSimulation();
         }
-
 
         public MainWindow()
         {
@@ -48,7 +47,7 @@ namespace FlatGalaxySim
             Canvas canvas = Flatgalaxy_Canvas;
             FlatGalaxy galaxy = new FlatGalaxy(canvas);
 
-            InputHandler inputHandler = new InputHandler();
+            inputHandler = new InputHandler();
             inputHandler.SetDefaultKeys(galaxy);
             SimSetup setup = new SimSetup(new LocalReader());
 
@@ -61,5 +60,10 @@ namespace FlatGalaxySim
                 galaxy.runSimulation();
         }
 
+        private void Setting_Click(object sender, RoutedEventArgs e)
+        {
+            var settingWindow = new SettingWindow(inputHandler);
+            settingWindow.Show();
+        }
     }
 }

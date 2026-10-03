@@ -25,10 +25,7 @@ namespace FlatGalaxySim.Factories
                     "asteroid" => CreateAsteroid(data),
                     _ => throw new ArgumentException($"Invalid celestial body type: {type}")
                 };
-
-
             }
-            
             return body ?? throw new ArgumentException("Celestial body could not be created.");
         }
 

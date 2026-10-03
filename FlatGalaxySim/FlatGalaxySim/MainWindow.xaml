@@ -11,6 +11,13 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Canvas Grid.Row="1" Background="white" x:Name="Flatgalaxy_Canvas"/>
+        <Canvas Grid.Row="1" Background="white" x:Name="Flatgalaxy_Canvas">
+            <Button  x:Name="btnSetting" Width="35" Height="35"
+                    Background="#80808080" Cursor="Hand" Click="Setting_Click" BorderThickness="0" Opacity="0.5" Panel.ZIndex="2" Canvas.Left="10" Canvas.Top="10" >
+                <Image  Source="/src/settings.png" Opacity="1" Width="25" Height="25" />
+            </Button>
+        </Canvas>
+        
+        
     </Grid>
 </Window>

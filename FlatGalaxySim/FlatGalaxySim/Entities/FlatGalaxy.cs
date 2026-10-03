@@ -14,7 +14,7 @@ namespace FlatGalaxySim.Entities
     public class FlatGalaxy
     {
         private Canvas mainCanvas;
-        private List<CelestialBody> celestials;
+        private List<CelestialBody> celestials = [];
         public List<CelestialBody> CelestialBodies { get => celestials; set => celestials = value; }
 
         public Canvas Canvas { get { return mainCanvas; } }
@@ -23,7 +23,6 @@ namespace FlatGalaxySim.Entities
         public FlatGalaxy(Canvas canvas)
         {
             this.mainCanvas = canvas;
-            CelestialBodies = new List<CelestialBody>();
         }
 
         public void SetBodies()
@@ -58,8 +57,7 @@ namespace FlatGalaxySim.Entities
         }
 
         public void DrawBodies() {
-
-            this.Canvas.Children.Clear();
+            
             foreach (var body in celestials)
             {
                 if (body.IsDrawable) body.Draw();
@@ -70,7 +68,6 @@ namespace FlatGalaxySim.Entities
         private TimeSpan lastTime = TimeSpan.Zero;
         private void OnRendering(object sender, EventArgs e)
         {
-            if(isRunning == false) {  return; }
             var now = ((RenderingEventArgs)e).RenderingTime;
             if (lastTime == TimeSpan.Zero) { lastTime = now; return; }
 
@@ -106,8 +103,10 @@ namespace FlatGalaxySim.Entities
             }
         }
 
+        //makes the sim faster
         public void RunSimFaster() => TIMESCALE += 10;
 
+        //makes the sim slower
         public void RunSimSlower() 
         {
             TIMESCALE -= 10;
@@ -118,6 +117,7 @@ namespace FlatGalaxySim.Entities
             }
         }
 
+        //this pauze or resume the sim
         public void PauseOrResume()  
         {
             isRunning = !isRunning;

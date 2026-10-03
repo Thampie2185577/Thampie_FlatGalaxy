@@ -21,7 +21,6 @@ namespace FlatGalaxySim.Entities
         private Ellipse? ellipse = null;
         private State? onCollisionState = null;
 
-
         public string Type { get => type; set => type = value; }
         public Position Position { get => position; set => position = value; }
         public Velocity Velocity { get => velocity; set => velocity = value; }
@@ -31,10 +30,11 @@ namespace FlatGalaxySim.Entities
         public State OnCollisionState { get => onCollisionState; set => onCollisionState = value; }
         public Ellipse Ellipse { get => ellipse; set => ellipse = value; }
 
-
         public bool IsDrawable = true;
         public void Draw()
         {
+            if (ellipse != null) return;
+
             ellipse = new Ellipse
             {
                 Width = radius * 2,

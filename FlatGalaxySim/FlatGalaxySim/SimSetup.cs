@@ -34,12 +34,11 @@ namespace FlatGalaxySim
             if (parser == null) return;
 
             // Parse the file contents and create celestial bodies
-            List<Dictionary<string, string>> parsedContents = parser.ParseContent(fileContents);
-            galaxy.CelestialBodies = CreateObject(parsedContents);
+            galaxy.CelestialBodies = CreateObjects(parser.ParseContent(fileContents));
         }
 
         // Creating objects
-        private List<CelestialBody> CreateObject(List<Dictionary<string, string>> contents)
+        private List<CelestialBody> CreateObjects(List<Dictionary<string, string>> contents)
         {
             List<CelestialBody> celestialBodies = new List<CelestialBody>();
 
@@ -52,7 +51,6 @@ namespace FlatGalaxySim
                 }
             });
 
-            ArgumentNullException.ThrowIfNull(celestialBodies);
             return (celestialBodies.Count > 0) ? celestialBodies : throw new ArgumentException("there are no celestialbodies", nameof(celestialBodies)) ;
         }
 

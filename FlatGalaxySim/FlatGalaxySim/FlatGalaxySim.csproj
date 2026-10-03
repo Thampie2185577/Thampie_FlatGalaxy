@@ -9,7 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="src\" />
+    <None Remove="src\settings.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="src\settings.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
 	  <None Update="src\planetsExtended.csv">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
