@@ -12,6 +12,6 @@ namespace FlatGalaxySim.Entities
         private List<Planet> neighbours = [];
 
         public string Name { get => name; set => name = value; }
-
+        public List<Planet> Neighbours { get => neighbours; set => neighbours = value; }
     }
 }

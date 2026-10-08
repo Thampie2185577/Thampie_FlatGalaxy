@@ -1,4 +1,5 @@
-﻿using FlatGalaxySim.States;
+﻿using FlatGalaxySim.Memento;
+using FlatGalaxySim.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,13 @@ namespace FlatGalaxySim.Entities
                 galaxy.Canvas.Children.Add(ellipse);
         }
 
+        public void Undraw()
+        {
+            if (ellipse == null) return;
+            galaxy?.Canvas.Children.Remove(ellipse);
+            ellipse = null;
+        }
+
         public void MoveBody(double dt, double cWidth, double cHeight)
         {
             position.x += velocity.vx * dt;
@@ -89,6 +97,7 @@ namespace FlatGalaxySim.Entities
         private bool wasColliding = false;
         public void runState()
         {
+            // when is colliding call state handle method
             if (onCollisionState != null && isColliding && !wasColliding)
             {
                 onCollisionState.Handle();
@@ -108,6 +117,31 @@ namespace FlatGalaxySim.Entities
         {
             this.onCollisionState = state;
             this.onCollisionState.SetContext(this);
+        }
+
+        // memento methods
+        public BodyMemento Save()
+        {
+            return new BodyMemento(this, 
+                this.position, 
+                this.velocity, 
+                this.radius, 
+                this.IsDrawable, 
+                this.isColliding,
+                this.wasColliding, 
+                this.onCollisionState
+                );
+        }
+
+        public void Restore(BodyMemento bodyMemento)
+        {
+            position = bodyMemento.Position;
+            velocity = bodyMemento.Velocity;
+            radius = bodyMemento.Radius;
+            IsDrawable = bodyMemento.IsDrawable;
+            isColliding = bodyMemento.IsColliding;
+            wasColliding = bodyMemento.WasColliding;
+            onCollisionState = bodyMemento.CollisionState;
         }
     }
 }

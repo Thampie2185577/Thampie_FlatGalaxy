@@ -1,4 +1,5 @@
-﻿using FlatGalaxySim.States;
+﻿using FlatGalaxySim.Memento;
+using FlatGalaxySim.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,12 @@ namespace FlatGalaxySim.Entities
         public Canvas Canvas { get { return mainCanvas; } }
         private bool isRunning = false;
 
+        private SimCareTaker simCareTaker;
+
         public FlatGalaxy(Canvas canvas)
         {
             this.mainCanvas = canvas;
+            simCareTaker = new SimCareTaker(this);
         }
 
         public void SetBodies()
@@ -56,11 +60,21 @@ namespace FlatGalaxySim.Entities
             }
         }
 
-        public void DrawBodies() {
+        private void DrawBodies() {
             
             foreach (var body in celestials)
             {
                 if (body.IsDrawable) body.Draw();
+            }
+        }
+
+        private void CreateLines()
+        {
+            foreach (var body in celestials.OfType<Planet>().ToList())
+            {
+                body.Neighbours.ForEach(x => { 
+                    
+                });
             }
         }
 
@@ -101,6 +115,8 @@ namespace FlatGalaxySim.Entities
             {
                 DeleteBody(chosenBodyToDelete);
             }
+
+            this.simCareTaker.BackUp();
         }
 
         //makes the sim faster
@@ -131,6 +147,11 @@ namespace FlatGalaxySim.Entities
             {
                 CompositionTarget.Rendering -= OnRendering;
             }
+        }
+
+        public void Rewind()
+        {
+            this.simCareTaker.Undo();
         }
         
         private List<CelestialBody> newBodies = new List<CelestialBody>();
@@ -168,6 +189,34 @@ namespace FlatGalaxySim.Entities
 
             body.isColliding = anyCollision;
             body.runState();
+        }
+
+        // all memento methods
+        public GalaxyMemento Save()
+        {
+            List<BodyMemento> bodyMementos = new List<BodyMemento>();
+
+            foreach (var body in this.celestials)
+            {
+                bodyMementos.Add(body.Save());
+            }
+
+            return new GalaxyMemento(bodyMementos, this.TIMESCALE);
+        }
+        
+        public void Restore(GalaxyMemento galaxyMemento)
+        {
+            this.TIMESCALE = galaxyMemento.TimeScale;
+
+            foreach (var bMemento in galaxyMemento.Bodies) {
+                bMemento.Body.Restore(bMemento);
+                var body = bMemento.Body;
+                celestials.Remove(bMemento.Body);
+                celestials.Add(body);   
+            };
+            
+            
+            lastTime = TimeSpan.Zero;
         }
     }
 }

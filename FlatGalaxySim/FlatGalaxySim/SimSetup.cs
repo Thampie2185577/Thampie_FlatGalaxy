@@ -41,6 +41,9 @@ namespace FlatGalaxySim
         private List<CelestialBody> CreateObjects(List<Dictionary<string, string>> contents)
         {
             List<CelestialBody> celestialBodies = new List<CelestialBody>();
+            
+            // List of planets names and its associated neighbours.
+            List<(string planet, string neighbours)> sTempPlanets = [];
 
             contents.ForEach(content =>
             {
@@ -49,9 +52,32 @@ namespace FlatGalaxySim
                 {
                     celestialBodies.Add(celestialBody);
                 }
+
+                if (content["type"] == "Planet")
+                {
+                    sTempPlanets.Add((content["name"], content["neighbours"]));
+                }
             });
 
+            SetPlanetNeighbours(celestialBodies.OfType<Planet>().ToList(), sTempPlanets);
+
             return (celestialBodies.Count > 0) ? celestialBodies : throw new ArgumentException("there are no celestialbodies", nameof(celestialBodies)) ;
+        }
+
+        private void SetPlanetNeighbours(List<Planet> planets, List<(string planet, string neighbours)> sPlanets)
+        {
+            foreach (var sPlanet in sPlanets)
+            {
+                string[] neigboursNames = sPlanet.neighbours.Split(',');
+
+                Planet planet = planets.Find(p => p.Name == sPlanet.planet)!;
+                if(planet == null) continue;
+
+                for (int i = 0; i < neigboursNames.Length; i++)
+                {
+                    planet.Neighbours.Add(planets.Find(p => p.Name == neigboursNames[i])!);
+                }
+            }
         }
 
         private IFileParser? GetParser(FileType fileType)

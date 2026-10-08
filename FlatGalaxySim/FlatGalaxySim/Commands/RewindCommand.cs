@@ -15,7 +15,7 @@ namespace FlatGalaxySim.Commands
 
         public override void Execute()
         {
-            throw new NotImplementedException();
+            reciever.Rewind();
         }
     }
 }

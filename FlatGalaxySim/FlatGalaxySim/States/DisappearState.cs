@@ -10,8 +10,8 @@ namespace FlatGalaxySim.States
     {
         public override void Handle()
         {
-            if(this.bodyContext.Galaxy.Canvas.Children.Contains(this.bodyContext.Ellipse))
-                this.bodyContext.Galaxy.Canvas.Children.Remove(this.bodyContext.Ellipse);
+            if (this.bodyContext.Galaxy.Canvas.Children.Contains(this.bodyContext.Ellipse))
+                this.bodyContext.Undraw();
             this.bodyContext.IsDrawable = false;
         }
     }

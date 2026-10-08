@@ -26,18 +26,19 @@ namespace FlatGalaxySim
             InitializeComponent();
 
             Canvas canvas = Flatgalaxy_Canvas;
-            SimSetup setup = new SimSetup(reader);
             FlatGalaxy galaxy = new FlatGalaxy(canvas);
-            InputHandler inputHandler = new InputHandler();
 
+            inputHandler = new InputHandler();
             inputHandler.SetDefaultKeys(galaxy);
-            setup.StartSetup(filePath, galaxy);
+            SimSetup setup = new SimSetup(reader);
 
+            setup.StartSetup(filePath, galaxy);
+            //setup.StartSetup(filePath, galaxy);
             PreviewKeyDown += inputHandler.OnkeyDown;
 
             if (galaxy.CelestialBodies != null)
                 galaxy.SetBodies();
-                galaxy.runSimulation();
+            galaxy.runSimulation();
         }
 
         public MainWindow()
